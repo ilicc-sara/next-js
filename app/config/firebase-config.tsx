@@ -1,10 +1,9 @@
 import { initializeApp } from "firebase/app";
-process.env.NEXT_PUBLIC_IME_VAR;
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_IME_VAR,
+  apiKey: "AIzaSyBVHdJMN_dJ0GGGtO-qCHCUDFsFAmAPlJw",
   authDomain: "fir-course-c5a50.firebaseapp.com",
   projectId: "fir-course-c5a50",
   storageBucket: "fir-course-c5a50.firebasestorage.app",
@@ -16,5 +15,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
-
 export const db = getFirestore(app);
