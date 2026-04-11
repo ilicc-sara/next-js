@@ -4,9 +4,13 @@ import { auth } from "../config/firebase-config";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import Link from "next/link";
 
+const SECRET_CODE = "nadjija45";
+
 const Login = () => {
   const [inputEmail, setInputEmail] = useState<string>("");
   const [inputPassword, setInputPassword] = useState<string>("");
+
+  const [inputCode, setInputCode] = useState<string>("");
 
   console.log(auth?.currentUser?.email);
 
@@ -14,6 +18,12 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, inputEmail, inputPassword);
+      //
+      if (inputCode !== SECRET_CODE) {
+        await auth.signOut();
+        alert("Pogrešan kod!");
+      }
+      //
     } catch (err) {
       console.error(err);
     }
@@ -54,6 +64,14 @@ const Login = () => {
           className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
           value={inputPassword}
           onChange={(e) => setInputPassword(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Login Code"
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+          value={inputCode}
+          onChange={(e) => setInputCode(e.target.value)}
         />
 
         <button

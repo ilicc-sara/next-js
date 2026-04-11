@@ -8,6 +8,8 @@ const Signup = () => {
   const [inputEmail, setInputEmail] = useState<string>("");
   const [inputPassword, setInputPassword] = useState<string>("");
 
+  const [inputCode, setInputCode] = useState<string>("");
+
   const signUp = async (e: any) => {
     e.preventDefault();
     try {
@@ -40,6 +42,14 @@ const Signup = () => {
         className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
         value={inputPassword}
         onChange={(e) => setInputPassword(e.target.value)}
+      />
+
+      <input
+        type="password"
+        placeholder="Login Code"
+        className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+        value={inputCode}
+        onChange={(e) => setInputCode(e.target.value)}
       />
 
       <button
