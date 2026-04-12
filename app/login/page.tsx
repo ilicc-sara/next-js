@@ -30,6 +30,7 @@ const Login = () => {
 
     setInputEmail("");
     setInputPassword("");
+    setInputCode("");
   };
 
   const logout = async () => {

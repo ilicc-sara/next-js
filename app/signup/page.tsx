@@ -3,6 +3,7 @@ import { useState } from "react";
 import { auth } from "../config/firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
   const [inputEmail, setInputEmail] = useState<string>("");
@@ -10,10 +11,18 @@ const Signup = () => {
 
   const [inputCode, setInputCode] = useState<string>("");
 
+  const router = useRouter();
+
   const signUp = async (e: any) => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, inputEmail, inputPassword);
+
+      setInputEmail("");
+      setInputPassword("");
+      setInputCode("");
+
+      router.push("/login");
     } catch (err) {
       console.error(err);
     }
