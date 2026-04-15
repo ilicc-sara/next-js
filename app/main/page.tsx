@@ -4,6 +4,10 @@ import { auth } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { applicants } from "./data";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../config/firebase-config";
+import { serverTimestamp } from "firebase/firestore";
 
 const Main = () => {
   console.log(auth?.currentUser?.email);
@@ -11,12 +15,38 @@ const Main = () => {
 
   const logout = async () => {
     try {
-      await signOut(auth);
+      await auth.signOut();
       router.push("/login");
     } catch (err) {
       console.error(err);
     }
   };
+
+  console.log(applicants);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const peopleData = collection(db, "jobs");
+
+      for (const item of applicants) {
+        try {
+          await addDoc(peopleData, {
+            company: item.company,
+            createdAt: item.createdAt || serverTimestamp(),
+            notes: item.notes,
+            position: item.position,
+            status: item.status,
+            updatedAt: item.updatedAt,
+            userId: item.userId,
+          });
+        } catch (error: any) {
+          console.error("Error adding applicant:", error.message);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>

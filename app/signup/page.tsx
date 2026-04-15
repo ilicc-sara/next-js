@@ -13,7 +13,7 @@ const Signup = () => {
 
   const router = useRouter();
 
-  const signUp = async (e: any) => {
+  const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, inputEmail, inputPassword);

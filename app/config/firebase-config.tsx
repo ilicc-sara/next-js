@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBVHdJMN_dJ0GGGtO-qCHCUDFsFAmAPlJw",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: "fir-course-c5a50.firebaseapp.com",
   projectId: "fir-course-c5a50",
   storageBucket: "fir-course-c5a50.firebasestorage.app",

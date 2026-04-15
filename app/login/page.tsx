@@ -22,7 +22,7 @@ const Login = () => {
     }
   }, []);
 
-  const signIn = async (e: any) => {
+  const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, inputEmail, inputPassword);
@@ -43,7 +43,7 @@ const Login = () => {
 
   const logout = async () => {
     try {
-      await signOut(auth);
+      await auth.signOut();
     } catch (err) {
       console.error(err);
     }
