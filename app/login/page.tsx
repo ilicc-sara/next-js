@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "../config/firebase-config";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const SECRET_CODE = "nadjija45";
 
@@ -13,6 +14,13 @@ const Login = () => {
   const [inputCode, setInputCode] = useState<string>("");
 
   console.log(auth?.currentUser?.email);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (auth) {
+      router.push("/main");
+    }
+  }, []);
 
   const signIn = async (e: any) => {
     e.preventDefault();
