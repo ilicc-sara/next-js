@@ -5,8 +5,6 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const SECRET_CODE = "nadjija45";
-
 const Login = () => {
   const [inputEmail, setInputEmail] = useState<string>("");
   const [inputPassword, setInputPassword] = useState<string>("");
@@ -26,12 +24,11 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, inputEmail, inputPassword);
-      //
-      if (inputCode !== SECRET_CODE) {
+
+      if (inputCode !== process.env.SECRET_CODE) {
         await auth.signOut();
         alert("Pogrešan kod!");
       }
-      //
     } catch (err) {
       console.error(err);
     }
