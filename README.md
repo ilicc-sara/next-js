@@ -70,3 +70,33 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 // import { applicants } from "./data";
 
  <li key={item.id}>{item.company}</li>
+
+```useEffect(() => {
+    const fetchData = async () => {
+      const peopleData = collection(db, "jobs");
+
+      for (const item of applicants) {
+        try {
+          await addDoc(peopleData, {
+            company: item.company,
+            createdAt: item.createdAt || serverTimestamp(),
+            notes: item.notes,
+            position: item.position,
+            status: item.status,
+            updatedAt: item.updatedAt,
+            userId: item.userId,
+            fullName: item.fullName,
+            email: item.email,
+          });
+        } catch (error: any) {
+          console.error("Error adding applicant:", error.message);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+```
+
+import { applicants } from "./data";
+import { serverTimestamp } from "firebase/firestore";

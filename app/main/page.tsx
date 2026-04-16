@@ -14,7 +14,8 @@ type ApplicantsType = {
   updatedAt: string;
   userId: string;
   id: string;
-  name: string;
+  fullName: string;
+  email: string;
 };
 
 const Main = () => {
@@ -30,6 +31,7 @@ const Main = () => {
           ...(doc.data() as Omit<ApplicantsType, "id">),
           id: doc.id,
         }));
+        console.log(filteredData);
         setAplicants(filteredData);
       } catch (err) {
         console.error(err);
@@ -38,8 +40,6 @@ const Main = () => {
 
     getApplicants();
   }, []);
-
-  console.log("applicants state", applicants);
 
   console.log(auth?.currentUser?.email);
   const router = useRouter();
@@ -106,10 +106,13 @@ const Main = () => {
           <ul className="list-none flex flex-col gap-2">
             {applicants &&
               applicants.map((item) => (
-                <li className="bg-white rounded-xl shadow-md p-4 flex flex-col gap-2 border border-gray-200">
+                <li
+                  key={item.id}
+                  className="bg-white rounded-xl shadow-md p-4 flex flex-col gap-2 border border-gray-200"
+                >
                   <div className="flex justify-between items-center">
                     <h1 className="text-lg font-bold text-gray-800">
-                      {item.userId}
+                      {item.fullName}
                     </h1>
                     <span
                       className="px-3 py-1 text-sm font-semibold rounded-full"
@@ -120,8 +123,11 @@ const Main = () => {
                       {item.status}
                     </span>
                   </div>
-                  <h2 className="text-2xl font-extrabold text-center text-gray-900 tracking-wide uppercase">
-                    {item.position}
+                  <h2 className="text-2xl font-bold text-left text-gray-900 tracking-wide uppercase">
+                    {item.position}{" "}
+                    <span className="text-sm font-normal capitalize">
+                      {item.company}
+                    </span>
                   </h2>
                   <div className="flex flex-col text-sm text-gray-600">
                     {" "}

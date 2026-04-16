@@ -7,6 +7,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "2026-01-10T14:00:00+01:00",
     userId: "user-001",
+    fullName: "Antonio Flac",
+    email: "antonio.flac@gmail.com",
   },
   {
     company: "InnoSoft",
@@ -16,6 +18,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-01-15T10:00:00+01:00",
     userId: "user-002",
+    fullName: "Marko Horvat",
+    email: "marko.horvat@gmail.com",
   },
   {
     company: "CodeWave",
@@ -25,6 +29,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-01-20T16:30:00+01:00",
     userId: "user-003",
+    fullName: "Ivan Perić",
+    email: "ivan.peric@gmail.com",
   },
   {
     company: "DevNest",
@@ -34,6 +40,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-01-25T09:20:00+01:00",
     userId: "user-004",
+    fullName: "Luka Kovač",
+    email: "luka.kovac@gmail.com",
   },
   {
     company: "ByteForge",
@@ -43,8 +51,9 @@ export const applicants = [
     status: "Applied",
     updatedAt: "2026-01-18T12:00:00+01:00",
     userId: "user-005",
+    fullName: "Petra Novak",
+    email: "petra.novak@gmail.com",
   },
-
   {
     company: "CloudCore",
     createdAt: "2026-01-18T09:00:00+01:00",
@@ -53,6 +62,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-01-22T11:00:00+01:00",
     userId: "user-006",
+    fullName: "Ana Marić",
+    email: "ana.maric@gmail.com",
   },
   {
     company: "PixelWorks",
@@ -62,6 +73,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-01-28T10:30:00+01:00",
     userId: "user-007",
+    fullName: "Filip Babić",
+    email: "filip.babic@gmail.com",
   },
   {
     company: "DataNest",
@@ -71,6 +84,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-01-30T14:00:00+01:00",
     userId: "user-008",
+    fullName: "Karlo Jurić",
+    email: "karlo.juric@gmail.com",
   },
   {
     company: "NextGen Labs",
@@ -80,6 +95,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-009",
+    fullName: "Ema Radić",
+    email: "ema.radic@gmail.com",
   },
   {
     company: "Appify",
@@ -89,6 +106,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-02-02T09:00:00+01:00",
     userId: "user-010",
+    fullName: "Nina Božić",
+    email: "nina.bozic@gmail.com",
   },
 
   {
@@ -99,6 +118,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-02-10T12:00:00+01:00",
     userId: "user-011",
+    fullName: "Dario Vuković",
+    email: "dario.vukovic@gmail.com",
   },
   {
     company: "CyberLink",
@@ -108,6 +129,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-02-12T15:00:00+01:00",
     userId: "user-012",
+    fullName: "Sara Lončar",
+    email: "sara.loncar@gmail.com",
   },
   {
     company: "Webify",
@@ -117,6 +140,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-013",
+    fullName: "Matea Kralj",
+    email: "matea.kralj@gmail.com",
   },
   {
     company: "DevCore",
@@ -126,6 +151,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-02-15T10:00:00+01:00",
     userId: "user-014",
+    fullName: "Tomislav Pavlović",
+    email: "tomislav.pavlovic@gmail.com",
   },
   {
     company: "AlphaTech",
@@ -135,6 +162,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-02-20T11:00:00+01:00",
     userId: "user-015",
+    fullName: "Ivana Knežević",
+    email: "ivana.knezevic@gmail.com",
   },
 
   {
@@ -145,6 +174,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-02-18T09:00:00+01:00",
     userId: "user-016",
+    fullName: "Josip Blažević",
+    email: "josip.blazevic@gmail.com",
   },
   {
     company: "GammaApps",
@@ -154,6 +185,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-017",
+    fullName: "Marin Šimić",
+    email: "marin.simic@gmail.com",
   },
   {
     company: "DeltaWorks",
@@ -163,6 +196,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-02-25T13:00:00+01:00",
     userId: "user-018",
+    fullName: "Katarina Rukavina",
+    email: "katarina.rukavina@gmail.com",
   },
   {
     company: "Omega Systems",
@@ -172,6 +207,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-03-01T10:00:00+01:00",
     userId: "user-019",
+    fullName: "Petar Grgić",
+    email: "petar.grgic@gmail.com",
   },
   {
     company: "NeoTech",
@@ -181,6 +218,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-03-02T12:00:00+01:00",
     userId: "user-020",
+    fullName: "Lucija Matić",
+    email: "lucija.matic@gmail.com",
   },
 
   {
@@ -191,6 +230,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-021",
+    fullName: "Stjepan Radić",
+    email: "stjepan.radic@gmail.com",
   },
   {
     company: "SkyNetix",
@@ -200,6 +241,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-03-05T10:00:00+01:00",
     userId: "user-022",
+    fullName: "Kristina Bošnjak",
+    email: "kristina.bosnjak@gmail.com",
   },
   {
     company: "CodeBridge",
@@ -209,6 +252,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-03-10T09:00:00+01:00",
     userId: "user-023",
+    fullName: "Dino Šarić",
+    email: "dino.saric@gmail.com",
   },
   {
     company: "AppStack",
@@ -218,6 +263,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-03-08T11:00:00+01:00",
     userId: "user-024",
+    fullName: "Helena Varga",
+    email: "helena.varga@gmail.com",
   },
   {
     company: "SoftEdge",
@@ -227,6 +274,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-025",
+    fullName: "Ivan Živković",
+    email: "ivan.zivkovic@gmail.com",
   },
 
   {
@@ -237,6 +286,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-03-12T10:00:00+01:00",
     userId: "user-026",
+    fullName: "Mia Perković",
+    email: "mia.perkovic@gmail.com",
   },
   {
     company: "CodeSphere",
@@ -246,6 +297,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-03-18T12:00:00+01:00",
     userId: "user-027",
+    fullName: "Marko Jović",
+    email: "marko.jovic@gmail.com",
   },
   {
     company: "DevSolutions",
@@ -255,6 +308,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-03-20T09:00:00+01:00",
     userId: "user-028",
+    fullName: "Tea Kovačević",
+    email: "tea.kovacevic@gmail.com",
   },
   {
     company: "BlueOcean Tech",
@@ -264,6 +319,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-029",
+    fullName: "Borna Matić",
+    email: "borna.matic@gmail.com",
   },
   {
     company: "FutureSoft",
@@ -273,6 +330,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-03-22T10:00:00+01:00",
     userId: "user-030",
+    fullName: "Sara Horvat",
+    email: "sara.horvat@gmail.com",
   },
 
   {
@@ -283,6 +342,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-03-25T11:00:00+01:00",
     userId: "user-031",
+    fullName: "Filip Radić",
+    email: "filip.radic@gmail.com",
   },
   {
     company: "NetSecure",
@@ -292,6 +353,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-03-27T10:00:00+01:00",
     userId: "user-032",
+    fullName: "Ivana Šimunović",
+    email: "ivana.simunovic@gmail.com",
   },
   {
     company: "AppFlow",
@@ -301,6 +364,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-033",
+    fullName: "Luka Radić",
+    email: "luka.radic@gmail.com",
   },
   {
     company: "TechBridge",
@@ -310,6 +375,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-03-30T09:00:00+01:00",
     userId: "user-034",
+    fullName: "Petra Horvat",
+    email: "petra.horvat@gmail.com",
   },
   {
     company: "CloudNova",
@@ -319,6 +386,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-04-01T10:00:00+01:00",
     userId: "user-035",
+    fullName: "Dario Kovač",
+    email: "dario.kovac@gmail.com",
   },
 
   {
@@ -329,6 +398,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-04-02T11:00:00+01:00",
     userId: "user-036",
+    fullName: "Nina Perić",
+    email: "nina.peric@gmail.com",
   },
   {
     company: "StackLabs",
@@ -338,6 +409,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-037",
+    fullName: "Tomislav Marić",
+    email: "tomislav.maric@gmail.com",
   },
   {
     company: "NextWave",
@@ -347,6 +420,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-04-05T09:00:00+01:00",
     userId: "user-038",
+    fullName: "Matea Horvat",
+    email: "matea.horvat@gmail.com",
   },
   {
     company: "QuantumSoft",
@@ -356,6 +431,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-04-08T12:00:00+01:00",
     userId: "user-039",
+    fullName: "Karlo Jurić",
+    email: "karlo.juric2@gmail.com",
   },
   {
     company: "SecureNet",
@@ -365,6 +442,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-04-10T10:00:00+01:00",
     userId: "user-040",
+    fullName: "Ema Novak",
+    email: "ema.novak@gmail.com",
   },
 
   {
@@ -375,6 +454,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-041",
+    fullName: "Filip Kovačević",
+    email: "filip.kovacevic@gmail.com",
   },
   {
     company: "CodeBase",
@@ -384,6 +465,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-04-12T09:00:00+01:00",
     userId: "user-042",
+    fullName: "Sara Radić",
+    email: "sara.radic@gmail.com",
   },
   {
     company: "SoftLayer",
@@ -393,6 +476,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-04-13T11:00:00+01:00",
     userId: "user-043",
+    fullName: "Ivan Horvat",
+    email: "ivan.horvat2@gmail.com",
   },
   {
     company: "DevPoint",
@@ -402,6 +487,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-04-14T10:00:00+01:00",
     userId: "user-044",
+    fullName: "Lucija Kovač",
+    email: "lucija.kovac@gmail.com",
   },
   {
     company: "Cloudify",
@@ -411,6 +498,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-045",
+    fullName: "Borna Horvat",
+    email: "borna.horvat@gmail.com",
   },
 
   {
@@ -421,6 +510,8 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-04-15T10:00:00+01:00",
     userId: "user-046",
+    fullName: "Ivana Radić",
+    email: "ivana.radic@gmail.com",
   },
   {
     company: "NetSystems",
@@ -430,6 +521,8 @@ export const applicants = [
     status: "Offer",
     updatedAt: "2026-04-15T12:00:00+01:00",
     userId: "user-047",
+    fullName: "Marko Kovačević",
+    email: "marko.kovacevic@gmail.com",
   },
   {
     company: "SecureOps",
@@ -439,6 +532,8 @@ export const applicants = [
     status: "Rejected",
     updatedAt: "2026-04-15T14:00:00+01:00",
     userId: "user-048",
+    fullName: "Petra Marić",
+    email: "petra.maric@gmail.com",
   },
   {
     company: "AppForge",
@@ -448,6 +543,8 @@ export const applicants = [
     status: "Applied",
     updatedAt: "",
     userId: "user-049",
+    fullName: "Dino Horvat",
+    email: "dino.horvat@gmail.com",
   },
   {
     company: "DevStream",
@@ -457,5 +554,7 @@ export const applicants = [
     status: "Interview",
     updatedAt: "2026-04-15T15:00:00+01:00",
     userId: "user-050",
+    fullName: "Mia Kovačević",
+    email: "mia.kovacevic@gmail.com",
   },
 ];
