@@ -36,3 +36,37 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 TypeScript, ESLint, No React Compiler, Tailwind CSS, No src/ directory, App Router, AGENTS.md
+
+<!-- allow write, update, delete: if request.auth != null && request.auth.uid == request.resource.data.userId -->
+
+```
+ useEffect(() => {
+    const fetchData = async () => {
+      const peopleData = collection(db, "jobs");
+
+      for (const item of applicants) {
+        try {
+          await addDoc(peopleData, {
+            company: item.company,
+            createdAt: item.createdAt || serverTimestamp(),
+            notes: item.notes,
+            position: item.position,
+            status: item.status,
+            updatedAt: item.updatedAt,
+            userId: item.userId,
+          });
+        } catch (error: any) {
+          console.error("Error adding applicant:", error.message);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+```
+
+import { onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+// import { applicants } from "./data";
+
+ <li key={item.id}>{item.company}</li>

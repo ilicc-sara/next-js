@@ -1,15 +1,46 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { applicants } from "./data";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase-config";
-import { serverTimestamp } from "firebase/firestore";
+
+type ApplicantsType = {
+  company: string;
+  createdAt: string;
+  notes: string;
+  position: string;
+  status: string;
+  updatedAt: string;
+  userId: string;
+  id: string;
+  name: string;
+};
 
 const Main = () => {
+  const [applicants, setAplicants] = useState<null | ApplicantsType[]>(null);
+
+  const applicantsCollection = collection(db, "jobs");
+
+  useEffect(() => {
+    const getApplicants = async () => {
+      try {
+        const data = await getDocs(applicantsCollection);
+        const filteredData = data.docs.map((doc) => ({
+          ...(doc.data() as Omit<ApplicantsType, "id">),
+          id: doc.id,
+        }));
+        setAplicants(filteredData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getApplicants();
+  }, []);
+
+  console.log("applicants state", applicants);
+
   console.log(auth?.currentUser?.email);
   const router = useRouter();
 
@@ -22,31 +53,20 @@ const Main = () => {
     }
   };
 
-  console.log(applicants);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const peopleData = collection(db, "jobs");
-
-      for (const item of applicants) {
-        try {
-          await addDoc(peopleData, {
-            company: item.company,
-            createdAt: item.createdAt || serverTimestamp(),
-            notes: item.notes,
-            position: item.position,
-            status: item.status,
-            updatedAt: item.updatedAt,
-            userId: item.userId,
-          });
-        } catch (error: any) {
-          console.error("Error adding applicant:", error.message);
-        }
-      }
-    };
-
-    fetchData();
-  }, []);
+  const generateStatusColor = (status: string) => {
+    if (status === "Applied") {
+      return "blue";
+    }
+    if (status === "Offer") {
+      return "green";
+    }
+    if (status === "Rejected") {
+      return "red";
+    }
+    if (status === "Interview") {
+      return "yellow";
+    }
+  };
 
   return (
     <>
@@ -59,7 +79,7 @@ const Main = () => {
           Log Out
         </button>
       </nav>
-      <section className="flex flex-col  ">
+      <section className="flex flex-col !mb-12">
         <form className="flex flex-col  !mx-auto bg-gray-100 !w-120 !p-4 !my-8 gap-2 rounded-lg">
           <label className="font-bold text-gray-400">Applicant Full Name</label>
           <input
@@ -81,6 +101,37 @@ const Main = () => {
             Apply
           </button>
         </form>
+
+        <div className="!mx-auto !w-134">
+          <ul className="list-none flex flex-col gap-2">
+            {applicants &&
+              applicants.map((item) => (
+                <li className="bg-white rounded-xl shadow-md p-4 flex flex-col gap-2 border border-gray-200">
+                  <div className="flex justify-between items-center">
+                    <h1 className="text-lg font-bold text-gray-800">
+                      {item.userId}
+                    </h1>
+                    <span
+                      className="px-3 py-1 text-sm font-semibold rounded-full"
+                      style={{
+                        backgroundColor: `${generateStatusColor(item.status)}`,
+                      }}
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-center text-gray-900 tracking-wide uppercase">
+                    {item.position}
+                  </h2>
+                  <div className="flex flex-col text-sm text-gray-600">
+                    {" "}
+                    <span>{item.createdAt}</span>
+                    <span> {item.notes} </span>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
       </section>
     </>
   );
