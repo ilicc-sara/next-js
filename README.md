@@ -100,3 +100,5 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 import { applicants } from "./data";
 import { serverTimestamp } from "firebase/firestore";
+
+console.log(auth?.currentUser?.email);

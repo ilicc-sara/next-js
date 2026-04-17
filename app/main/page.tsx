@@ -5,34 +5,22 @@ import { useRouter } from "next/navigation";
 import { collection, addDoc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import { serverTimestamp } from "firebase/firestore";
-
-type ApplicantsType = {
-  company: string;
-  createdAt: string;
-  notes: string;
-  position: string;
-  status: string;
-  updatedAt: string;
-  userId: string;
-  id: string;
-  fullName: string;
-  email: string;
-};
+import Input from "./Input";
+import { generateStatusColor } from "./helpers";
+import type { ApplicantsType } from "./types";
 
 const Main = () => {
   const [applicants, setAplicants] = useState<null | ApplicantsType[]>(null);
-
-  console.log(applicants);
-
-  const applicantsCollection = collection(db, "jobs");
-
-  const [applicantName, setApplicantName] = useState<string>("");
-  const [applicantEmail, setApplicantEmail] = useState<string>("");
-  const [applicantPossition, setApplicantPossition] = useState<string>("");
-  const [appliedCompany, setAppliedCompany] = useState<string>("");
   const [appliedStatus, setAppliedStatus] = useState<string>("Applied");
+  const [newCandidate, setNewCandidate] = useState({
+    applicantName: "",
+    applicantEmail: "",
+    applicantPossition: "",
+    appliedCompany: "",
+  });
 
-  console.log(appliedStatus);
+  const router = useRouter();
+  const applicantsCollection = collection(db, "jobs");
 
   useEffect(() => {
     const getApplicants = async () => {
@@ -52,8 +40,16 @@ const Main = () => {
     getApplicants();
   }, []);
 
-  console.log(auth?.currentUser?.email);
-  const router = useRouter();
+  function handleInfoChange(e: any) {
+    e.preventDefault();
+
+    setNewCandidate((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  }
 
   const logout = async () => {
     try {
@@ -64,19 +60,13 @@ const Main = () => {
     }
   };
 
-  const generateStatusColor = (status: string) => {
-    if (status === "Applied") {
-      return "blue";
-    }
-    if (status === "Offer") {
-      return "green";
-    }
-    if (status === "Rejected") {
-      return "red";
-    }
-    if (status === "Interview") {
-      return "yellow";
-    }
+  const resetForm = () => {
+    setNewCandidate({
+      applicantName: "",
+      applicantEmail: "",
+      applicantPossition: "",
+      appliedCompany: "",
+    });
   };
 
   const submitNewCandidate = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,21 +74,18 @@ const Main = () => {
 
     try {
       await addDoc(applicantsCollection, {
-        company: appliedCompany,
-        createdAt: serverTimestamp(),
-        email: applicantEmail,
-        fullName: applicantName,
-        notes: "Adding Notes About Application...",
-        position: applicantPossition,
         status: appliedStatus,
+        company: newCandidate.appliedCompany,
+        email: newCandidate.applicantEmail,
+        fullName: newCandidate.applicantName,
+        position: newCandidate.applicantPossition,
+        createdAt: serverTimestamp(),
+        notes: "Adding Notes About Application...",
         updatedAt: "",
         userId: crypto.randomUUID(),
       });
 
-      setApplicantName("");
-      setApplicantEmail("");
-      setApplicantPossition("");
-      setAppliedCompany("");
+      resetForm();
       setAppliedStatus("Applied");
     } catch (err) {
       console.error(err);
@@ -121,33 +108,36 @@ const Main = () => {
           onSubmit={submitNewCandidate}
           className="flex flex-col  !mx-auto bg-gray-100 !w-120 !p-4 !my-8 gap-2 rounded-lg"
         >
-          <label className="font-bold text-gray-400">Applicant Full Name</label>
-          <input
-            value={applicantName}
-            onChange={(e) => setApplicantName(e.target.value)}
-            className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+          <Input
+            name="applicantName"
+            value={newCandidate.applicantName}
             placeholder="Name..."
+            label="Applicant Full Name"
+            handleInputChange={handleInfoChange}
           />
-          <label className="font-bold text-gray-400">Applicant Email</label>
-          <input
-            value={applicantEmail}
-            onChange={(e) => setApplicantEmail(e.target.value)}
-            className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+
+          <Input
+            name="applicantEmail"
+            value={newCandidate.applicantEmail}
             placeholder="Email..."
+            label="Applicant Email"
+            handleInputChange={handleInfoChange}
           />
-          <label className="font-bold text-gray-400">Applied Possition</label>
-          <input
-            value={applicantPossition}
-            onChange={(e) => setApplicantPossition(e.target.value)}
-            className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+
+          <Input
+            name="applicantPossition"
+            value={newCandidate.applicantPossition}
             placeholder="Possition..."
+            label="Applied Possition"
+            handleInputChange={handleInfoChange}
           />
-          <label className="font-bold text-gray-400">Company Name</label>
-          <input
-            value={appliedCompany}
-            onChange={(e) => setAppliedCompany(e.target.value)}
-            className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
-            placeholder="Company"
+
+          <Input
+            name="appliedCompany"
+            value={newCandidate.appliedCompany}
+            placeholder="Company..."
+            label="Company Name"
+            handleInputChange={handleInfoChange}
           />
 
           <label className="font-bold text-gray-400">Status</label>
