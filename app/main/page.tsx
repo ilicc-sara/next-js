@@ -4,6 +4,7 @@ import { auth } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase-config";
+import { serverTimestamp } from "firebase/firestore";
 
 type ApplicantsType = {
   company: string;
@@ -21,7 +22,17 @@ type ApplicantsType = {
 const Main = () => {
   const [applicants, setAplicants] = useState<null | ApplicantsType[]>(null);
 
+  console.log(applicants);
+
   const applicantsCollection = collection(db, "jobs");
+
+  const [applicantName, setApplicantName] = useState<string>("");
+  const [applicantEmail, setApplicantEmail] = useState<string>("");
+  const [applicantPossition, setApplicantPossition] = useState<string>("");
+  const [appliedCompany, setAppliedCompany] = useState<string>("");
+  const [appliedStatus, setAppliedStatus] = useState<string>("Applied");
+
+  console.log(appliedStatus);
 
   useEffect(() => {
     const getApplicants = async () => {
@@ -68,6 +79,32 @@ const Main = () => {
     }
   };
 
+  const submitNewCandidate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await addDoc(applicantsCollection, {
+        company: appliedCompany,
+        createdAt: serverTimestamp(),
+        email: applicantEmail,
+        fullName: applicantName,
+        notes: "Adding Notes About Application...",
+        position: applicantPossition,
+        status: appliedStatus,
+        updatedAt: "",
+        userId: crypto.randomUUID(),
+      });
+
+      setApplicantName("");
+      setApplicantEmail("");
+      setApplicantPossition("");
+      setAppliedCompany("");
+      setAppliedStatus("Applied");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <nav className="flex justify-between  !p-6 bg-yellow-50  shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
@@ -80,24 +117,55 @@ const Main = () => {
         </button>
       </nav>
       <section className="flex flex-col !mb-12">
-        <form className="flex flex-col  !mx-auto bg-gray-100 !w-120 !p-4 !my-8 gap-2 rounded-lg">
+        <form
+          onSubmit={submitNewCandidate}
+          className="flex flex-col  !mx-auto bg-gray-100 !w-120 !p-4 !my-8 gap-2 rounded-lg"
+        >
           <label className="font-bold text-gray-400">Applicant Full Name</label>
           <input
+            value={applicantName}
+            onChange={(e) => setApplicantName(e.target.value)}
             className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
             placeholder="Name..."
           />
+          <label className="font-bold text-gray-400">Applicant Email</label>
+          <input
+            value={applicantEmail}
+            onChange={(e) => setApplicantEmail(e.target.value)}
+            className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+            placeholder="Email..."
+          />
           <label className="font-bold text-gray-400">Applied Possition</label>
           <input
+            value={applicantPossition}
+            onChange={(e) => setApplicantPossition(e.target.value)}
             className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
             placeholder="Possition..."
           />
           <label className="font-bold text-gray-400">Company Name</label>
           <input
+            value={appliedCompany}
+            onChange={(e) => setAppliedCompany(e.target.value)}
             className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
             placeholder="Company"
           />
 
-          <button className="w-full py-2 rounded-lg bg-blue-200 text-white font-bold hover:bg-blue-700 hover:text-white transition duration-200 shadow-md !my-3">
+          <label className="font-bold text-gray-400">Status</label>
+          <select
+            value={appliedStatus}
+            onChange={(e) => setAppliedStatus(e.target.value)}
+            className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+          >
+            <option>Applied</option>
+            <option>Interview</option>
+            <option>Offer</option>
+            <option>Rejected</option>
+          </select>
+
+          <button
+            type="submit"
+            className="w-full py-2 rounded-lg bg-blue-200 text-white font-bold hover:bg-blue-700 hover:text-white transition duration-200 shadow-md !my-3"
+          >
             Apply
           </button>
         </form>
@@ -131,7 +199,7 @@ const Main = () => {
                   </h2>
                   <div className="flex flex-col text-sm text-gray-600">
                     {" "}
-                    <span>{item.createdAt}</span>
+                    {/* <span>{item.createdAt.substring(0, 10)}</span> */}
                     <span> {item.notes} </span>
                   </div>
                 </li>
