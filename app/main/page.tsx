@@ -2,7 +2,14 @@
 import { useEffect, useState } from "react";
 import { auth } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
-import { collection, addDoc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import { serverTimestamp } from "firebase/firestore";
 import Input from "./Input";
@@ -92,9 +99,22 @@ const Main = () => {
     }
   };
 
+  const deleteCandidate = async (id: string) => {
+    try {
+      const candidate = doc(db, "jobs", id);
+      await deleteDoc(candidate);
+      setAplicants((prev) => {
+        if (!prev) return prev;
+        return prev?.filter((item) => item.id !== id);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
-      <nav className="flex justify-between  !p-6 bg-yellow-50  shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
+      <nav className="flex justify-between  !p-6 bg-gray-100  shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
         <h1 className="text-lg font-bold ">Job Applications</h1>
         <button
           onClick={() => logout()}
@@ -173,7 +193,7 @@ const Main = () => {
                       {item.fullName}
                     </h1>
                     <span
-                      className="px-3 py-1 text-sm font-semibold rounded-full"
+                      className="px-3 py-1 text-sm font-semibold rounded-full text-gray-800"
                       style={{
                         backgroundColor: `${generateStatusColor(item.status)}`,
                       }}
@@ -187,10 +207,16 @@ const Main = () => {
                       {item.company}
                     </span>
                   </h2>
-                  <div className="flex flex-col text-sm text-gray-600">
+                  <div className="flex text-sm text-gray-600 justify-between">
                     {" "}
                     {/* <span>{item.createdAt.substring(0, 10)}</span> */}
                     <span> {item.notes} </span>
+                    <button
+                      onClick={() => deleteCandidate(item.id)}
+                      className="flex items-center gap-1 px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 shadow-sm"
+                    >
+                      🗑 Delete
+                    </button>
                   </div>
                 </li>
               ))}

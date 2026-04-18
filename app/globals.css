@@ -27,4 +27,8 @@ body {
 
 button {
   cursor: pointer;
+  color: rgb(255, 100, 100);
+  color: rgb(255, 248, 111);
+  color: rgb(162, 255, 95);
+  color: rgb(95, 202, 255);
 }
