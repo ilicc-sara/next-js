@@ -29,21 +29,21 @@ const Main = () => {
   const router = useRouter();
   const applicantsCollection = collection(db, "jobs");
 
-  useEffect(() => {
-    const getApplicants = async () => {
-      try {
-        const data = await getDocs(applicantsCollection);
-        const filteredData = data.docs.map((doc) => ({
-          ...(doc.data() as Omit<ApplicantsType, "id">),
-          id: doc.id,
-        }));
-        console.log(filteredData);
-        setAplicants(filteredData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  const getApplicants = async () => {
+    try {
+      const data = await getDocs(applicantsCollection);
+      const filteredData = data.docs.map((doc) => ({
+        ...(doc.data() as Omit<ApplicantsType, "id">),
+        id: doc.id,
+      }));
+      console.log(filteredData);
+      setAplicants(filteredData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
+  useEffect(() => {
     getApplicants();
   }, []);
 
@@ -93,6 +93,7 @@ const Main = () => {
       });
 
       resetForm();
+      getApplicants();
       setAppliedStatus("Applied");
     } catch (err) {
       console.error(err);
@@ -107,6 +108,13 @@ const Main = () => {
         if (!prev) return prev;
         return prev?.filter((item) => item.id !== id);
       });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const editCandidate = async (id: string) => {
+    try {
     } catch (err) {
       console.error(err);
     }
@@ -211,12 +219,21 @@ const Main = () => {
                     {" "}
                     {/* <span>{item.createdAt.substring(0, 10)}</span> */}
                     <span> {item.notes} </span>
-                    <button
-                      onClick={() => deleteCandidate(item.id)}
-                      className="flex items-center gap-1 px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 shadow-sm"
-                    >
-                      🗑 Delete
-                    </button>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => deleteCandidate(item.id)}
+                        className="flex items-center gap-1 px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 shadow-sm"
+                      >
+                        🗑️
+                      </button>
+
+                      <button
+                        onClick={() => editCandidate(item.id)}
+                        className="flex items-center gap-1 px-3 py-1 text-sm bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition duration-200 shadow-sm"
+                      >
+                        ✏️
+                      </button>
+                    </div>
                   </div>
                 </li>
               ))}
