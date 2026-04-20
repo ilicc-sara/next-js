@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { auth } from "../config/firebase-config";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
@@ -25,15 +25,17 @@ const Login = () => {
     return () => unsubscribe();
   }, [router]);
 
+  console.log("secret code", process.env.NEXT_PUBLIC_SECRET_CODE);
+
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, inputEmail, inputPassword);
 
-      // if (inputCode !== process.env.SECRET_CODE) {
-      //   await auth.signOut();
-      //   alert("Pogrešan kod!");
-      // }
+      if (inputCode !== process.env.NEXT_PUBLIC_SECRET_CODE) {
+        await auth.signOut();
+        alert("Wrong code");
+      }
     } catch (err) {
       console.error(err);
     }
