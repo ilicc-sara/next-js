@@ -9,6 +9,8 @@ import {
   updateDoc,
   doc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import { serverTimestamp } from "firebase/firestore";
@@ -33,7 +35,7 @@ const Main = () => {
   const router = useRouter();
   const applicantsCollection = collection(db, "jobs");
 
-  console.log(auth?.currentUser?.email);
+  console.log(auth?.currentUser?.uid);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -47,14 +49,34 @@ const Main = () => {
 
   console.log(auth?.currentUser?.email);
 
+  // const getApplicants = async () => {
+  //   try {
+  //     const data = await getDocs(applicantsCollection);
+  //     const filteredData = data.docs.map((doc) => ({
+  //       ...(doc.data() as Omit<ApplicantsType, "id">),
+  //       id: doc.id,
+  //     }));
+  //     console.log(filteredData);
+  //     setAplicants(filteredData);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
   const getApplicants = async () => {
     try {
-      const data = await getDocs(applicantsCollection);
+      const user = auth?.currentUser;
+
+      if (!user) return;
+
+      const q = query(applicantsCollection, where("userId", "==", user.uid));
+      const data = await getDocs(q);
+
       const filteredData = data.docs.map((doc) => ({
         ...(doc.data() as Omit<ApplicantsType, "id">),
         id: doc.id,
       }));
-      console.log(filteredData);
+
       setAplicants(filteredData);
     } catch (err) {
       console.error(err);
@@ -107,7 +129,8 @@ const Main = () => {
         createdAt: serverTimestamp(),
         notes: "Adding Notes About Application...",
         updatedAt: "",
-        userId: crypto.randomUUID(),
+        id: crypto.randomUUID(),
+        userId: auth?.currentUser?.uid,
       });
 
       resetForm();
