@@ -1,4 +1,4 @@
-import type { InputProps } from "./types";
+import type { InputProps } from "../types";
 
 const Input = ({
   name,
