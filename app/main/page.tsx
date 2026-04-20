@@ -15,6 +15,7 @@ import { serverTimestamp } from "firebase/firestore";
 import Input from "./components/Input";
 import { generateStatusColor } from "./helpers";
 import type { ApplicantsType } from "./types";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Main = () => {
   const [applicants, setAplicants] = useState<null | ApplicantsType[]>(null);
@@ -31,6 +32,20 @@ const Main = () => {
 
   const router = useRouter();
   const applicantsCollection = collection(db, "jobs");
+
+  console.log(auth?.currentUser?.email);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  console.log(auth?.currentUser?.email);
 
   const getApplicants = async () => {
     try {

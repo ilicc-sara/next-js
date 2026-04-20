@@ -4,6 +4,7 @@ import { auth } from "../config/firebase-config";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Login = () => {
   const [inputEmail, setInputEmail] = useState<string>("");
@@ -15,20 +16,24 @@ const Login = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (auth) {
-      router.push("/main");
-    }
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/main");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, inputEmail, inputPassword);
 
-      if (inputCode !== process.env.SECRET_CODE) {
-        await auth.signOut();
-        alert("Pogrešan kod!");
-      }
+      // if (inputCode !== process.env.SECRET_CODE) {
+      //   await auth.signOut();
+      //   alert("Pogrešan kod!");
+      // }
     } catch (err) {
       console.error(err);
     }
@@ -94,13 +99,6 @@ const Login = () => {
           </Link>
         </p>
       </form>
-
-      <button
-        onClick={() => logout()}
-        className="!mx-auto bg-red-400 text-white"
-      >
-        Log Out
-      </button>
     </>
   );
 };
