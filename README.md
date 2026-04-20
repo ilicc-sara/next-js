@@ -102,3 +102,6 @@ import { applicants } from "./data";
 import { serverTimestamp } from "firebase/firestore";
 
 console.log(auth?.currentUser?.email);
+
+const candidateDoc = doc(db, "jobs", id);
+await updateDoc(candidateDoc, {company: inputCandidate.appliedCompany, })

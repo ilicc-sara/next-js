@@ -27,6 +27,7 @@ const Main = () => {
   });
 
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
+  const [editId, setEditId] = useState<null | string>(null);
 
   const router = useRouter();
   const applicantsCollection = collection(db, "jobs");
@@ -124,6 +125,7 @@ const Main = () => {
     status: string,
   ) => {
     setShowEditForm(true);
+    setEditId(id);
     setInputCandidate({
       applicantName: name,
       applicantEmail: email,
@@ -131,7 +133,25 @@ const Main = () => {
       appliedCompany: company,
     });
     setAppliedStatus(status);
+  };
+
+  const submitEdidCandidate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editId) return;
     try {
+      const candidateDoc = doc(db, "jobs", editId);
+      await updateDoc(candidateDoc, {
+        status: appliedStatus,
+        company: inputCandidate.appliedCompany,
+        email: inputCandidate.applicantEmail,
+        fullName: inputCandidate.applicantName,
+        position: inputCandidate.applicantPossition,
+        updatedAt: serverTimestamp(),
+      });
+      getApplicants();
+      setShowEditForm(false);
+      setEditId(null);
+      resetForm();
     } catch (err) {
       console.error(err);
     }
@@ -142,13 +162,13 @@ const Main = () => {
       {showEditForm && (
         <div
           className="overlay"
-          onClick={() => {
-            setShowEditForm(false);
-            resetForm();
-          }}
+          // onClick={() => {
+          //   setShowEditForm(false);
+          //   resetForm();
+          // }}
         >
           <form
-            onSubmit={submitNewCandidate}
+            onSubmit={submitEdidCandidate}
             className="flex flex-col  !mx-auto bg-gray-100 !w-120 !p-4 !my-8 gap-2 rounded-lg"
           >
             <Input
@@ -199,7 +219,7 @@ const Main = () => {
               type="submit"
               className="w-full py-2 rounded-lg bg-blue-200 text-white font-bold hover:bg-blue-700 hover:text-white transition duration-200 shadow-md !my-3"
             >
-              Apply
+              Update
             </button>
           </form>
         </div>
@@ -304,7 +324,7 @@ const Main = () => {
                     <div className="flex gap-1">
                       <button
                         onClick={() => deleteCandidate(item.id)}
-                        className="flex items-center gap-1 px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 shadow-sm"
+                        className="flex items-center gap-1 px-3 py-1 text-sm bg-red-200 text-white rounded-md hover:bg-red-300 transition duration-200 shadow-sm"
                       >
                         🗑️
                       </button>
@@ -320,7 +340,7 @@ const Main = () => {
                             item.status,
                           )
                         }
-                        className="flex items-center gap-1 px-3 py-1 text-sm bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition duration-200 shadow-sm"
+                        className="flex items-center gap-1 px-3 py-1 text-sm bg-yellow-200 text-white rounded-md hover:bg-yellow-300 transition duration-200 shadow-sm"
                       >
                         ✏️
                       </button>
