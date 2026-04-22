@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { auth } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
 import {
@@ -32,10 +32,26 @@ const Main = () => {
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
   const [editId, setEditId] = useState<null | string>(null);
 
+  const [filters, setFilters] = useState({
+    search: "",
+    activeStatus: null,
+  });
   const router = useRouter();
   const applicantsCollection = collection(db, "jobs");
 
   console.log(auth?.currentUser?.uid);
+
+  type FiltersType = {
+    search: string;
+    activeStatus: string | null;
+  };
+
+  type FilterKey = keyof FiltersType;
+
+  type FilterPayload = {
+    key: FilterKey;
+    value: FiltersType[FilterKey];
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -195,6 +211,14 @@ const Main = () => {
     }
   };
 
+  function handleChangeFIlter(payload: FilterPayload) {
+    const { key, value } = payload;
+
+    setFilters((prev) => {
+      return { ...prev, [key]: value };
+    });
+  }
+
   return (
     <>
       {showEditForm && (
@@ -248,9 +272,9 @@ const Main = () => {
               className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
             >
               <option>Applied</option>
-              <option>Interview</option>
               <option>Offer</option>
               <option>Rejected</option>
+              <option>Interview</option>
             </select>
 
             <button
@@ -264,12 +288,36 @@ const Main = () => {
       )}
       <nav className="flex justify-between  !p-6 bg-gray-100  shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
         <h1 className="text-lg font-bold ">Job Applications</h1>
-        <button
-          onClick={() => logout()}
-          className="!p-2 bg-red-400 text-white rounded-lg"
-        >
-          Log Out
-        </button>
+
+        <div className="flex gap-5">
+          <div>
+            <select
+              onChange={(e) => {
+                if (e.target.value === "All Statuses") {
+                  handleChangeFIlter({ key: "activeStatus", value: null });
+                } else {
+                  handleChangeFIlter({
+                    key: "activeStatus",
+                    value: e.target.value,
+                  });
+                }
+              }}
+              className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+            >
+              <option value="All Statuses">All Statuses</option>
+              <option value="Applied">Applied</option>
+              <option value="Interview">Interview</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <button
+            onClick={() => logout()}
+            className="!p-2 bg-red-400 text-white rounded-lg"
+          >
+            Log Out
+          </button>
+        </div>
       </nav>
       <section className="flex flex-col !mb-12">
         <form
