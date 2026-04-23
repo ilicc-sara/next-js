@@ -43,3 +43,9 @@ button {
   backdrop-filter: blur(20px);
   z-index: 5;
 }
+
+.close-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

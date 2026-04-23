@@ -105,3 +105,22 @@ console.log(auth?.currentUser?.email);
 
 const candidateDoc = doc(db, "jobs", id);
 await updateDoc(candidateDoc, {company: inputCandidate.appliedCompany, })
+
+```
+  // const getApplicants = async () => {
+  //   try {
+  //     const data = await getDocs(applicantsCollection);
+  //     const filteredData = data.docs.map((doc) => ({
+  //       ...(doc.data() as Omit<ApplicantsType, "id">),
+  //       id: doc.id,
+  //     }));
+  //     console.log(filteredData);
+  //     setAplicants(filteredData);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+```
+
+console.log(auth?.currentUser?.uid);
+console.log("logedin user", auth?.currentUser);

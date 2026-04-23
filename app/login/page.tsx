@@ -29,9 +29,9 @@ const Login = () => {
 
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       await signInWithEmailAndPassword(auth, inputEmail, inputPassword);
-
       if (inputCode !== process.env.NEXT_PUBLIC_SECRET_CODE) {
         await auth.signOut();
         alert("Wrong code");

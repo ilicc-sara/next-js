@@ -18,3 +18,15 @@ export type InputProps = {
   label?: string;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
+export type FiltersType = {
+  searchCompany: string;
+  activeStatus: string | null;
+};
+
+export type FilterKey = keyof FiltersType;
+
+export type FilterPayload = {
+  key: FilterKey;
+  value: FiltersType[FilterKey];
+};

@@ -2,56 +2,33 @@
 import { useEffect, useState, useMemo } from "react";
 import { auth } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  updateDoc,
-  doc,
-  deleteDoc,
-  query,
-  where,
-} from "firebase/firestore";
+// prettier-ignore
+import {collection, addDoc, getDocs, updateDoc, doc, deleteDoc, query, where,} from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import { serverTimestamp } from "firebase/firestore";
 import Input from "./components/Input";
 import { generateStatusColor } from "./helpers";
-import type { ApplicantsType } from "./types";
+// prettier-ignore
+import type { ApplicantsType, FiltersType, FilterKey, FilterPayload } from "./types";
 import { onAuthStateChanged } from "firebase/auth";
+import { debounce } from "throttle-debounce";
 
 const Main = () => {
   const [applicants, setAplicants] = useState<null | ApplicantsType[]>(null);
+  // prettier-ignore
+  const [filteredApplicants, setFilteredApplicants] = useState<ApplicantsType[] | null>(null);
   const [appliedStatus, setAppliedStatus] = useState<string>("Applied");
-  const [inputCandidate, setInputCandidate] = useState({
-    applicantName: "",
-    applicantEmail: "",
-    applicantPossition: "",
-    appliedCompany: "",
-  });
-
+  // prettier-ignore
+  const [inputCandidate, setInputCandidate] = useState({applicantName: "", applicantEmail: "", applicantPossition: "", appliedCompany: "",});
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
   const [editId, setEditId] = useState<null | string>(null);
+  // prettier-ignore
+  const [filters, setFilters] = useState({searchCompany: "", activeStatus: null,});
+  const [sortValue, setSortValue] = useState("a-b");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const [filters, setFilters] = useState({
-    search: "",
-    activeStatus: null,
-  });
   const router = useRouter();
   const applicantsCollection = collection(db, "jobs");
-
-  console.log(auth?.currentUser?.uid);
-
-  type FiltersType = {
-    search: string;
-    activeStatus: string | null;
-  };
-
-  type FilterKey = keyof FiltersType;
-
-  type FilterPayload = {
-    key: FilterKey;
-    value: FiltersType[FilterKey];
-  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -62,22 +39,6 @@ const Main = () => {
 
     return () => unsubscribe();
   }, []);
-
-  console.log(auth?.currentUser?.email);
-
-  // const getApplicants = async () => {
-  //   try {
-  //     const data = await getDocs(applicantsCollection);
-  //     const filteredData = data.docs.map((doc) => ({
-  //       ...(doc.data() as Omit<ApplicantsType, "id">),
-  //       id: doc.id,
-  //     }));
-  //     console.log(filteredData);
-  //     setAplicants(filteredData);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
 
   const getApplicants = async () => {
     try {
@@ -94,6 +55,7 @@ const Main = () => {
       }));
 
       setAplicants(filteredData);
+      setFilteredApplicants(filteredData);
     } catch (err) {
       console.error(err);
     }
@@ -219,16 +181,48 @@ const Main = () => {
     });
   }
 
+  useEffect(() => {
+    const { activeStatus, searchCompany } = filters;
+
+    if (!applicants) return;
+    let filteredApplicantsTemp = [...applicants];
+
+    if (activeStatus) {
+      filteredApplicantsTemp = filteredApplicantsTemp.filter(
+        (person) => person.status === activeStatus,
+      );
+    }
+    if (searchCompany) {
+      filteredApplicantsTemp = filteredApplicantsTemp.filter((person) =>
+        person.company
+          .toLowerCase()
+          .includes(searchCompany.toLocaleLowerCase()),
+      );
+    }
+
+    setFilteredApplicants(filteredApplicantsTemp);
+  }, [filters]);
+
+  const filteredCandidates = useMemo(() => {
+    return filteredApplicants?.sort((a, b) => {
+      if (sortValue === "a-b") return a.fullName.localeCompare(b.fullName);
+      if (sortValue === "b-a") return b.fullName.localeCompare(a.fullName);
+    });
+  }, [filteredApplicants, sortValue]);
+
   return (
     <>
       {showEditForm && (
-        <div
-          className="overlay"
-          // onClick={() => {
-          //   setShowEditForm(false);
-          //   resetForm();
-          // }}
-        >
+        <div className="overlay">
+          <button
+            onClick={() => {
+              setShowEditForm(false);
+              resetForm();
+            }}
+            className="close-overlay"
+          >
+            ❌
+          </button>
           <form
             onSubmit={submitEdidCandidate}
             className="flex flex-col  !mx-auto bg-gray-100 !w-120 !p-4 !my-8 gap-2 rounded-lg"
@@ -266,6 +260,7 @@ const Main = () => {
             />
 
             <label className="font-bold text-gray-400">Status</label>
+
             <select
               value={appliedStatus}
               onChange={(e) => setAppliedStatus(e.target.value)}
@@ -290,7 +285,19 @@ const Main = () => {
         <h1 className="text-lg font-bold ">Job Applications</h1>
 
         <div className="flex gap-5">
-          <div>
+          <div className="flex gap-2">
+            <input
+              type="search"
+              value={filters.searchCompany}
+              onChange={(e) =>
+                handleChangeFIlter({
+                  key: "searchCompany",
+                  value: e.target.value,
+                })
+              }
+              className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+              placeholder="Search Company..."
+            ></input>
             <select
               onChange={(e) => {
                 if (e.target.value === "All Statuses") {
@@ -309,6 +316,15 @@ const Main = () => {
               <option value="Interview">Interview</option>
               <option value="Offer">Offer</option>
               <option value="Rejected">Rejected</option>
+            </select>
+
+            <select
+              value={sortValue}
+              onChange={(e) => setSortValue(e.target.value)}
+              className="w-full  px-4 py-2 rounded-lg border border-gray-300 bg-white/80 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+            >
+              <option value="a-b">Sort Names Ascending</option>
+              <option value="b-a">Sort Names Decending</option>
             </select>
           </div>
           <button
@@ -378,8 +394,8 @@ const Main = () => {
 
         <div className="!mx-auto !w-134">
           <ul className="list-none flex flex-col gap-2">
-            {applicants &&
-              applicants.map((item) => (
+            {filteredCandidates &&
+              filteredCandidates.map((item) => (
                 <li
                   key={item.id}
                   className="bg-white rounded-xl shadow-md p-4 flex flex-col gap-2 border border-gray-200"
@@ -405,7 +421,7 @@ const Main = () => {
                   </h2>
                   <div className="flex text-sm text-gray-600 justify-between">
                     {" "}
-                    {/* <span>{item.createdAt.substring(0, 10)}</span> */}
+                    {/* <span>{item.createdAt}</span> */}
                     <span> {item.notes} </span>
                     <div className="flex gap-1">
                       <button
